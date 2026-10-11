@@ -1,0 +1,140 @@
+#include <iostream>
+#include <vector>
+#include <string>
+#include <algorithm>
+
+using namespace std;
+
+struct item {
+    string name;
+    string tipo;
+    int quantita;
+    int valore;
+};
+
+void ChiamaInventario(const vector<item>& inventario) {
+    for (size_t i = 0; i < inventario.size(); i++) {
+        cout << (i + 1) << ". " << "Nome: " << inventario[i].name 
+             << ", Tipologia: " << inventario[i].tipo 
+             << ", Quantita: " << inventario[i].quantita 
+             << ", Valore: " << inventario[i].valore << endl;
+    }
+}
+
+int main() {
+    vector<item> inventario;
+    int scelta;
+    
+    cout << "=== GESTIONE INVENTARIO ===" << endl;
+
+    do {
+        cout << "\n1. Aggiungi un nuovo oggetto" << endl;
+        cout << "2. Visualizza inventario" << endl;
+        cout << "3. Modifica un oggetto" << endl;
+        cout << "4. Elimina un oggetto" << endl;
+        cout << "0. Esci" << endl;
+        cout << "Scegli un'opzione: ";
+        cin >> scelta;
+
+        if (scelta == 1) {
+            item nuovoOggetto;
+            cout << "Inserisci il nome dell'oggetto: " << endl;
+            cin >> nuovoOggetto.name;
+            cout << "Inserire tipologia oggetto: " << endl;
+            cin >> nuovoOggetto.tipo;
+            cout << "Inserire quantita oggetto: " << endl;
+            cin >> nuovoOggetto.quantita;
+            cout << "Inserire valore oggetto: " << endl;
+            cin >> nuovoOggetto.valore;
+            
+            inventario.push_back(nuovoOggetto);
+            cout << "Oggetto aggiunto con successo!\n";
+
+        } else if (scelta == 2) {
+            if (inventario.empty()) {
+                cout << "Lo zaino e vuoto!\n";
+            } else {
+                cout << "\nInventario:\n";
+                ChiamaInventario(inventario);
+            }
+
+        } else if (scelta == 3) {
+            if (inventario.empty()) {
+                cout << "Lo zaino e vuoto, non c'e nulla da modificare!\n";
+            } else {
+                cout << "\nScegliere elemento da modificare (numero):\n";
+                ChiamaInventario(inventario);
+                int modifica;
+                cin >> modifica;
+
+                   
+                if (modifica > 0 && modifica <= static_cast<int>(inventario.size())) {
+                    int indiceVettore = modifica - 1;
+                    int sceltaModifica;
+                    
+                    do {
+                        cout << "Cosa vuoi modificare dell'oggetto " << inventario[indiceVettore].name << "?\n";
+                        cout << "1. Nome\n";
+                        cout << "2. Tipologia\n";
+                        cout << "3. Quantita\n";
+                        cout << "4. Valore\n";
+                        cout << "Scelta: ";
+                        cin >> sceltaModifica;
+
+                        if (sceltaModifica < 1 || sceltaModifica > 4) {
+                            cout << "Scelta non valida. Riprova.\n";
+                        }
+                    } while (sceltaModifica < 1 || sceltaModifica > 4);
+
+                    switch (sceltaModifica) {
+                        case 1:
+                            cout << "Inserisci il nuovo nome: ";
+                            cin >> inventario[indiceVettore].name;
+                            break;
+                        case 2:
+                            cout << "Inserisci la nuova tipologia: ";
+                            cin >> inventario[indiceVettore].tipo;
+                            break;
+                        case 3:
+                            cout << "Inserisci la nuova quantita: ";
+                            cin >> inventario[indiceVettore].quantita;
+                            break;
+                        case 4:
+                            cout << "Inserisci il nuovo valore: ";
+                            cin >> inventario[indiceVettore].valore;
+                            break;
+                    }
+                    cout << "Modifica completata!\n";
+                } else {
+                    cout << "Numero oggetto non valido!\n";
+                }
+            }
+
+        } else if (scelta == 4) {
+            if (inventario.empty()) {
+                cout << "Lo zaino e vuoto, non c'e nulla da eliminare!\n";
+            } else {
+                cout << "\nScegliere un elemento da eliminare (numero):\n";
+                ChiamaInventario(inventario);
+                int elimina;
+                cin >> elimina;
+
+                if (elimina > 0 && elimina <= static_cast<int>(inventario.size())) {
+                    int indiceVettore = elimina - 1;
+                    inventario.erase(inventario.begin() + indiceVettore);
+                    cout << "Oggetto eliminato con successo.\n";
+                } else {
+                    cout << "Scelta non valida.\n";
+                }
+            }
+
+        } else if (scelta == 0) {
+            cout << "Uscita dal programma. A presto!\n";
+        } else {
+            cout << "Scelta non valida. Riprova.\n";
+        }
+
+    } while (scelta != 0);
+
+    return 0;
+}
